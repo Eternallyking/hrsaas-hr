@@ -112,5 +112,6 @@ export default {
       const res = await login(payload)
       context.commit('setToken', res)
     }
-  }
+  },
+  
 }
