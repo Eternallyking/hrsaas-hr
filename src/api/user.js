@@ -7,6 +7,15 @@ export function login(data) {
     data
   })
 }
-export function getInfo(token) {}
+export function getUserInfoApi() {
+  return request({
+    url: '/sys/profile',
+    method: 'post'
+  })
+}
 
-export function logout() {}
+export function getUserDetail(id) {
+  return request({
+    url: '/sys/user/' + id
+  })
+}
