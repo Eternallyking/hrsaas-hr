@@ -3,7 +3,7 @@
     <el-form
       ref="loginForm"
       :model="loginForm"
-      :rules="loginRules"
+      :rules="loginFromRules"
       class="login-form"
       auto-complete="on"
       label-position="left"
@@ -14,7 +14,21 @@
         </h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="mobile">
+        <i class="svg-container">
+          <svg-icon iconClass="user"></svg-icon>
+        </i>
+        <el-input v-model="loginForm.mobile"></el-input>
+      </el-form-item>
+
+      <el-form-item prop="password">
+        <i class="svg-container">
+          <svg-icon iconClass="password"></svg-icon>
+        </i>
+        <el-input type="password" v-model="loginForm.password"></el-input>
+      </el-form-item>
+
+      <!-- <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
@@ -49,20 +63,20 @@
             :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
           />
         </span>
-      </el-form-item>
+      </el-form-item> -->
 
       <el-button
-        :loading="loading"
         type="primary"
         class="loginBtn"
         style="width: 100%; margin-bottom: 30px"
-        @click.native.prevent="handleLogin"
+        @click="loginfn"
+        :loading="islogin"
         >登录</el-button
       >
 
       <div class="tips">
         <span style="margin-right: 20px">账号: 13800000002</span>
-        <span>密码: 123456</span>
+        <span> 密码: 123456</span>
       </div>
     </el-form>
   </div>
@@ -74,36 +88,45 @@ import { validUsername } from '@/utils/validate'
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
-    }
+    // const validateUsername = (rule, value, callback) => {
+    //   if (!validUsername(value)) {
+    //     callback(new Error('Please enter the correct user name'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
+    // const validatePassword = (rule, value, callback) => {
+    //   if (value.length < 6) {
+    //     callback(new Error('The password can not be less than 6 digits'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       loginForm: {
-        username: '13800000002',
+        mobile: '13800000002',
         password: '123456'
       },
-      loginRules: {
-        username: [
-          { required: true, trigger: 'blur', validator: validateUsername }
+      loginFromRules: {
+        mobile: [
+          { required: true, message: '请输入账号', trigger: 'blur' },
+          {
+            pattern: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+            message: '手机格式不正确',
+            trigger: 'blur'
+          }
         ],
         password: [
-          { required: true, trigger: 'blur', validator: validatePassword }
+          { required: true, message: '请输入账号', trigger: 'blur' }
+          // {
+          //   pattern:
+          //     /^(?![a-zA-Z]+$)(?![A-Z0-9]+$)(?![A-Z\W_!@#$%^&*`~()-+=]+$)(?![a-z0-9]+$)(?![a-z\W_!@#$%^&*`~()-+=]+$)(?![0-9\W_!@#$%^&*`~()-+=]+$)[a-zA-Z0-9\W_!@#$%^&*`~()-+=]/,
+          //   message: '密码请包含数字，字母，特殊符号，且不能少于6位',
+          //   trigger: 'blur'
+          // }
         ]
       },
-      loading: false,
-      passwordType: 'password',
-      redirect: undefined
+      islogin: false
     }
   },
   watch: {
@@ -115,34 +138,17 @@ export default {
     }
   },
   methods: {
-    showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
-      } else {
-        this.passwordType = 'password'
+    async loginfn() {
+      this.islogin = true
+      try {
+        await this.$refs.loginForm.validate()
+        await this.$store.dispatch('user/getToken', this.loginForm)
+        this.$router.push('/')
+        this.$message.success('登录成功')
+      } catch (error) {
+      } finally {
+        this.islogin = false
       }
-      this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
-    },
-    handleLogin() {
-      this.$refs.loginForm.validate((valid) => {
-        if (valid) {
-          this.loading = true
-          this.$store
-            .dispatch('user/login', this.loginForm)
-            .then(() => {
-              this.$router.push({ path: this.redirect || '/' })
-              this.loading = false
-            })
-            .catch(() => {
-              this.loading = false
-            })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
     }
   }
 }
