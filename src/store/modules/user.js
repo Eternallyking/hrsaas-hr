@@ -96,6 +96,7 @@
 // }
 
 import { login, getUserInfoApi, getUserDetail } from '@/api/user'
+import { setTokenTime } from '@/utils/auth'
 
 export default {
   namespaced: true,
@@ -115,11 +116,16 @@ export default {
     async getToken(context, payload) {
       const res = await login(payload)
       context.commit('setToken', res)
+      setTokenTime()
     },
     async getUserInfo(context) {
       const userBaseInfo = await getUserInfoApi()
       const userInfo = await getUserDetail(userBaseInfo.userId)
       context.commit('setUserInfo', { ...userBaseInfo, ...userInfo })
+    },
+    logout(context) {
+      context.commit('setToken', '')
+      context.commit('setUserInfo', {})
     }
   }
 }
