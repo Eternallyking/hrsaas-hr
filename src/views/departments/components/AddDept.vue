@@ -1,5 +1,5 @@
 <template>
-  <el-dialog @close="onclose" title="新增部门" :visible="visible" width="50%">
+  <el-dialog @close="onclose" :title="Title" :visible="visible" width="50%">
     <el-form
       ref="form"
       label-width="120px"
@@ -42,30 +42,52 @@
 </template>
 
 <script>
-import { getDeptsApi, addDeptsApi } from '@/api/departments'
+import {
+  getDeptsApi,
+  addDeptsApi,
+  addDeptsByIdApi,
+  editDeptsApi
+} from '@/api/departments'
 import { getemployeesapi } from '@/api/employees'
 export default {
   data() {
-    const checkdeptname = (rule, value, callback) => {
-      if (!this.correntnode.children) return callback()
-      const isrepeat = this.correntnode.children.some((e) => e.name === value)
+    const checkdeptname = async (rule, value, callback) => {
+      let isrepeat
+      if (this.formData.id) {
+        const { depts } = await getDeptsApi()
+        isrepeat = depts
+          .filter(
+            (e) => e.pid === this.formData.id && e.id !== this.formData.id
+          )
+          .some((e) => e.name === value)
+      } else {
+        if (!this.correntnode.children) return callback()
+        isrepeat = this.correntnode.children.some((e) => e.name === value)
+      }
       isrepeat
         ? callback(new Error('同级部门下已经有财务核算部这个部门了'))
         : callback()
     }
     const checkdeptcode = async (rule, value, callback) => {
       const { depts } = await getDeptsApi()
-      const isrepeat = depts.some((e) => e.code === value)
+      let isrepeat
+      if (this.formData.id) {
+        isrepeat = depts
+          .filter((e) => e.id !== this.formData.id)
+          .some((e) => e.code === value)
+      } else {
+        isrepeat = depts.some((e) => e.code === value)
+      }
       isrepeat
         ? callback(new Error('已经有' + value + '这个编码了'))
         : callback()
     }
     return {
       formData: {
-        name: '', // 部门名称
-        code: '', // 部门编码
-        manager: '', // 部门管理者
-        introduce: '' // 部门介绍
+        name: '',
+        code: '',
+        manager: '',
+        introduce: ''
       },
       formRules: {
         name: [
@@ -136,6 +158,11 @@ export default {
       required: true
     }
   },
+  computed: {
+    Title() {
+      return this.formData.id ? '编辑部门' : '新增部门'
+    }
+  },
 
   created() {
     this.getemployees()
@@ -148,18 +175,35 @@ export default {
     },
     onclose() {
       this.$emit('update:visible', false)
+      this.$refs.form.resetFields()
+      this.formData = {
+        name: '',
+        code: '',
+        manager: '',
+        introduce: ''
+      }
     },
     async onsave() {
-      await this.$refs.form.validate()
-      this.formData.pid = this.correntnode.id
       try {
-        await addDeptsApi(this.formData)
-        this.$message.success('添加成功')
-        this.$emit('addDepts')
-        this.onclose()
+        if (this.formData.id) {
+          await editDeptsApi(this.formData)
+          this.$message.success('编辑部门成功')
+          this.onclose()
+          this.$emit('addDepts')
+        } else {
+          await this.$refs.form.validate()
+          this.formData.pid = this.correntnode.id
+          await addDeptsApi(this.formData)
+          this.$message.success('添加部门成功')
+          this.onclose()
+          this.$emit('addDepts')
+        }
       } catch (error) {
-        this.$message.error('添加失败')
+        this.$message.error('操作部门失败')
       }
+    },
+    async getDeptById(id) {
+      this.formData = await addDeptsByIdApi(id)
     }
   }
 }

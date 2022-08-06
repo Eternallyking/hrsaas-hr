@@ -1,19 +1,21 @@
 <template>
   <div class="dashboard-container">
     <div class="app-container">
-      <el-card class="box-card">
+      <el-card v-loading="loading" class="box-card">
         <TreeTools @add="showadddept" :treenode="company" :isroot="true" />
         <el-tree :data="treedata" :props="defaultProps" default-expand-all
           ><template v-slot="{ data }">
             <TreeTools
               @add="showadddept"
               @remove="getDepts"
+              @edit="showedit"
               :treenode="data"
             /> </template
         ></el-tree>
       </el-card>
     </div>
     <AddDept
+      ref="addDept"
       @addDepts="getDepts"
       :visible.sync="dialogVisible"
       :correntnode="correntnode"
@@ -39,7 +41,8 @@ export default {
       },
       company: { name: '传智教育', manager: '负责人' },
       dialogVisible: false,
-      correntnode: {}
+      correntnode: {},
+      loading: false
     }
   },
   components: {
@@ -53,12 +56,18 @@ export default {
 
   methods: {
     async getDepts() {
+      this.loading = true
       const res = await getDeptsApi()
       this.treedata = transListToTree(res.depts, '')
+      this.loading = false
     },
     showadddept(val) {
       this.dialogVisible = true
       this.correntnode = val
+    },
+    showedit(val) {
+      this.dialogVisible = true
+      this.$refs.addDept.getDeptById(val.id)
     }
   }
 }
