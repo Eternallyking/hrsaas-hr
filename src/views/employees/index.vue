@@ -10,7 +10,9 @@
             @click="$router.push('/import')"
             >导入</el-button
           >
-          <el-button size="small" type="danger">导出</el-button>
+          <el-button size="small" type="danger" @click="importExcel"
+            >导出</el-button
+          >
           <el-button size="small" type="primary" @click="Add()"
             >新增员工</el-button
           >
@@ -95,6 +97,8 @@
 import { getemployeeslistapi, delEmployee } from '@/api/employees'
 import employees from '@/constant/employees'
 import Add from './components/Add'
+import employess from '@/constant/employees'
+const { exportMapKeyPath, hireType } = employess
 export default {
   name: 'Employees',
   data() {
@@ -137,6 +141,33 @@ export default {
     },
     Add() {
       this.addvisible = true
+    },
+    async importExcel() {
+      const { rows } = await getemployeeslistapi({
+        page: 1,
+        size: this.total
+      })
+      const header = Object.keys(exportMapKeyPath)
+      const data = rows.map((item) => {
+        return header.map((h) => {
+          if (h === '聘用形式') {
+            const finditem = hireType.find((heir) => {
+              return heir.id === item[exportMapKeyPath[h]]
+            })
+            return finditem ? finditem.value : '未知'
+          } else {
+            return item[exportMapKeyPath[h]]
+          }
+        })
+      })
+      const { export_json_to_excel } = await import('@/vendor/Export2Excel')
+      export_json_to_excel({
+        header, //表头 必填
+        data, //具体数据 必填
+        filename: 'excel-list', //非必填
+        autoWidth: true, //非必填
+        bookType: 'xlsx' //非必填
+      })
     }
   }
 }
