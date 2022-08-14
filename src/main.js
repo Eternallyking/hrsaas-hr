@@ -16,9 +16,17 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 import * as directives from '@/directives'
+for (let key in directives) {
+  Vue.directive(key, directives[key])
+}
 
 import components from '@/components'
 Vue.use(components)
+
+import * as filter from '@/filters'
+for (let key in filter) {
+  Vue.filter(key, filter[key])
+}
 
 /**
  * If you don't want to use mock-server
@@ -40,10 +48,6 @@ Vue.use(ElementUI, { locale })
 // Vue.use(ElementUI)
 
 Vue.config.productionTip = false
-
-for (let key in directives) {
-  Vue.directive(key, directives[key])
-}
 
 new Vue({
   el: '#app',

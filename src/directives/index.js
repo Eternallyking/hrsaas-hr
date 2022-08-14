@@ -1,6 +1,19 @@
 export const imgError = {
-  inserted: function (el, { value }) {
-    el.onerror = function () {
+  inserted(el, { value }) {
+    if (el.src) {
+      el.onerror = function () {
+        el.src = value
+      }
+    } else {
+      el.src = value
+    }
+  },
+  update(el, { value }) {
+    if (el.src) {
+      el.onerror = function () {
+        el.src = value
+      }
+    } else {
       el.src = value
     }
   }
