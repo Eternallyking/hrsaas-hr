@@ -1,6 +1,7 @@
 import PageTooles from '@/components/PageTooles'
 import UploadExcel from '@/components/UploadExcel'
-const components = [PageTooles, UploadExcel]
+import UploadImg from '@/components/UploadImg'
+const components = [PageTooles, UploadExcel, UploadImg]
 export default {
   install(Vue) {
     components.forEach((component) => {
