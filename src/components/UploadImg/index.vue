@@ -82,7 +82,7 @@ export default {
       this.previewimgdialog = true
     },
     beforeUpload(file) {
-      const types = ['image/jpeg', 'image/png', 'image/gif']
+      const types = ['image/jpeg', 'image/png', 'image/gif', 'image/mp4']
       if (!types.includes(file.type)) {
         this.$message.error('请选择' + types.join('、') + '图片')
         return false

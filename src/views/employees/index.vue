@@ -35,6 +35,7 @@
                   padding: 10px;
                 "
                 alt=""
+                @click="showercode(row.staffPhoto)"
               />
             </template>
           </el-table-column>
@@ -96,6 +97,9 @@
       </el-card>
     </div>
     <Add @addgetlist="getemployeeslist" :visible.sync="addvisible" />
+    <el-dialog title="头像二维码" :visible.sync="ercodedialog">
+      <canvas id="canvas"></canvas>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -104,6 +108,7 @@ import employees from '@/constant/employees'
 import Add from './components/Add'
 import employess from '@/constant/employees'
 const { exportMapKeyPath, hireType } = employess
+import Qrcode from 'qrcode'
 export default {
   name: 'Employees',
   data() {
@@ -114,7 +119,8 @@ export default {
         page: 1,
         size: 5
       },
-      addvisible: false
+      addvisible: false,
+      ercodedialog: false
     }
   },
   components: {
@@ -172,6 +178,14 @@ export default {
         filename: 'excel-list', //非必填
         autoWidth: true, //非必填
         bookType: 'xlsx' //非必填
+      })
+    },
+    showercode(photo) {
+      if (!photo) return this.$message.error('该用户还未设置头像')
+      this.ercodedialog = true
+      this.$nextTick(() => {
+        const canvas = document.getElementById('canvas')
+        Qrcode.toCanvas(canvas, photo)
       })
     }
   }
