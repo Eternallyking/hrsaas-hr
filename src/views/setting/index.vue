@@ -34,7 +34,9 @@
             </el-table-column>
             <el-table-column align="center" label="操作">
               <template>
-                <el-button size="small" type="success">分配权限</el-button>
+                <el-button size="small" type="success" @click="setrigtsfn"
+                  >分配权限</el-button
+                >
                 <el-button size="small" type="primary">编辑</el-button>
                 <el-button size="small" type="danger">删除</el-button>
               </template>
@@ -116,12 +118,34 @@
         <el-button type="primary" @click="onaddrole">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      title="给角色分配权限"
+      :visible.sync="setrigtsVisible"
+      width="50%"
+    >
+      <el-tree
+        :data="permissions"
+        :props="{ label: 'name' }"
+        default-expand-all
+        node-key="id"
+        show-checkbox
+        :default-checked-keys="defaultCheckedKeys"
+      ></el-tree>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="setrigtsVisible = false">取 消</el-button>
+        <el-button type="primary" @click="setrigtsVisible = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getRolesApi, addRolesApi } from '@/api/role'
 import { getcompanyApi } from '@/api/setting'
+import { getPermissionList } from '@/api/permission'
+import { transListToTree } from '@/utils'
 export default {
   data() {
     return {
@@ -138,13 +162,17 @@ export default {
       addRoleFormrules: {
         name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }]
       },
-      CompanyInformation: {}
+      CompanyInformation: {},
+      setrigtsVisible: false,
+      permissions: [],
+      defaultCheckedKeys: ['1', '1063315016368918528'] 
     }
   },
 
   created() {
     this.getRoles()
     this.getcompany()
+    this.getPermissions()
   },
 
   methods: {
@@ -182,6 +210,14 @@ export default {
       this.CompanyInformation = await getcompanyApi(
         this.$store.state.user.userInfo.companyId
       )
+    },
+    setrigtsfn() {
+      this.setrigtsVisible = true
+    },
+    async getPermissions() {
+      const res = await getPermissionList()
+      const treePermission = transListToTree(res, '0')
+      this.permissions = treePermission
     }
   }
 }
