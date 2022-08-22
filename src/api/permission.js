@@ -5,3 +5,11 @@ export function getPermissionList() {
     url: '/sys/permission'
   })
 }
+// 新增权限
+export function addPermission(data) {
+  return request({
+    url: '/sys/permission',
+    method: 'post',
+    data
+  })
+}

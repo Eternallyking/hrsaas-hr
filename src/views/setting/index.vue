@@ -3,7 +3,10 @@
     <div class="app-container">
       <el-tabs v-model="activeName">
         <el-tab-pane label="角色管理" name="first"
-          ><el-button type="primary" @click="adddialogVisible = true"
+          ><el-button
+            v-if="isHas(point.roles.add)"
+            type="primary"
+            @click="adddialogVisible = true"
             >新增角色</el-button
           >
           <el-table
@@ -33,12 +36,17 @@
             >
             </el-table-column>
             <el-table-column align="center" label="操作">
-              <template>
-                <el-button size="small" type="success" @click="setrigtsfn"
+              <template slot-scope="{ row }">
+                <el-button
+                  size="small"
+                  type="success"
+                  @click="setrigtsfn(row.id)"
                   >分配权限</el-button
                 >
                 <el-button size="small" type="primary">编辑</el-button>
-                <el-button size="small" type="danger">删除</el-button>
+                <el-button size="small" type="danger" @click="onremove(row.id)"
+                  >删除</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
@@ -122,6 +130,8 @@
       title="给角色分配权限"
       :visible.sync="setrigtsVisible"
       width="50%"
+      @close="setrigtsonclose"
+      destroy-on-close
     >
       <el-tree
         :data="permissions"
@@ -130,22 +140,28 @@
         node-key="id"
         show-checkbox
         :default-checked-keys="defaultCheckedKeys"
+        ref="perTree"
       ></el-tree>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="setrigtsVisible = false">取 消</el-button>
-        <el-button type="primary" @click="setrigtsVisible = false"
-          >确 定</el-button
-        >
+        <el-button @click="setrigtsonclose">取 消</el-button>
+        <el-button type="primary" @click="setrigtsonyes">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getRolesApi, addRolesApi } from '@/api/role'
+import {
+  getRolesApi,
+  addRolesApi,
+  removeRoleApi,
+  getRolesInfoApi,
+  assignPerm
+} from '@/api/role'
 import { getcompanyApi } from '@/api/setting'
 import { getPermissionList } from '@/api/permission'
 import { transListToTree } from '@/utils'
+import MixinPermission from '@/mixins/permission'
 export default {
   data() {
     return {
@@ -165,9 +181,11 @@ export default {
       CompanyInformation: {},
       setrigtsVisible: false,
       permissions: [],
-      defaultCheckedKeys: ['1', '1063315016368918528'] 
+      defaultCheckedKeys: [],
+      roleId: ''
     }
   },
+  mixins: [MixinPermission],
 
   created() {
     this.getRoles()
@@ -211,13 +229,38 @@ export default {
         this.$store.state.user.userInfo.companyId
       )
     },
-    setrigtsfn() {
+    async setrigtsfn(id) {
+      this.roleId = id
       this.setrigtsVisible = true
+      const res = await getRolesInfoApi(id)
+      this.defaultCheckedKeys = res.permIds
     },
     async getPermissions() {
       const res = await getPermissionList()
       const treePermission = transListToTree(res, '0')
       this.permissions = treePermission
+    },
+    async onremove(id) {
+      await removeRoleApi(id)
+      this.$message.success('删除成功')
+      if (this.tableData.length === 1) {
+        this.page--
+        this.getRoles()
+      } else {
+        this.getRoles()
+      }
+    },
+    setrigtsonclose() {
+      this.setrigtsVisible = false
+      this.defaultCheckedKeys = []
+    },
+    async setrigtsonyes() {
+      await assignPerm({
+        id: this.roleId,
+        permIds: this.$refs.perTree.getCheckedKeys()
+      })
+      this.$message.success('分配成功')
+      this.setrigtsonclose()
     }
   }
 }
