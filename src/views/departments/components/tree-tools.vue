@@ -1,12 +1,11 @@
 <template>
-  <!-- 头部 -->
   <el-row style="width: 100%" type="flex">
     <el-col>{{ treeNode.name }}</el-col>
     <el-col :span="5">
       <el-row type="flex">
         <el-col>{{ treeNode.manager }}</el-col>
-        <el-col
-          ><el-dropdown>
+        <el-col>
+          <el-dropdown>
             <span class="el-dropdown-link">
               操作<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
@@ -33,19 +32,22 @@
 <script>
 import { delDeptsApi } from '@/api/departments'
 export default {
+  name: 'TreeTools',
   data() {
     return {}
   },
+
   props: {
     treeNode: {
       type: Object,
-      required: true
+      required: true,
     },
     isRoot: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
+
   created() {},
 
   methods: {
@@ -54,18 +56,15 @@ export default {
         await this.$confirm('此操作将永久删除该部门, 是否继续?', '提示', {
           confirmButtonText: '删除',
           cancelButtonText: '取消',
-          type: 'warning'
+          type: 'warning',
         })
-        // console.log(1)
-        // console.log(this.treeNode.id)
-        const res = await delDeptsApi(this.treeNode.id)
-        console.log(res)
+        await delDeptsApi(this.treeNode.id)
         this.$message.success('删除成功')
         this.$emit('remove')
-      } catch (error) {}
-    }
-  }
+      } catch (err) {}
+    },
+  },
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="less"></style>

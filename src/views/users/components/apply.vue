@@ -109,7 +109,7 @@
 
 <script>
 import { startProcess } from '@/api/approvals'
-import commonApi from '@/api/user'
+import commonApi from '@/constant/user'
 export default {
   name: 'UsersTableIndex',
   props: ['dialogVisible'],
@@ -125,16 +125,16 @@ export default {
         reason: '',
         processKey: 'process_dimission',
         processName: '离职',
-        userId: this.$store.getters.userId
+        userId: this.$store.getters.userId,
       },
       baseData: commonApi,
-      state: '3'
+      state: '3',
     }
   },
   computed: {
     computeOpType() {
       return this.opType === 3
-    }
+    },
   },
   created() {},
   methods: {
@@ -156,8 +156,8 @@ export default {
     handleChange(obj) {
       this.ruleForm = {}
       this.state = obj
-    }
-  }
+    },
+  },
 }
 </script>
 

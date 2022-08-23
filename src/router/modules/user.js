@@ -5,7 +5,9 @@ export default {
   component: Layout,
   hidden: true,
   name: 'user',
-  meta: { id: 'user' },
+  meta: {
+    id: 'user', // 用来和后端权限做约定的
+  },
   children: [
     {
       path: '/users/approvals',
@@ -13,8 +15,8 @@ export default {
       name: 'usersApprovals',
       hidden: true,
       meta: {
-        title: '用户'
-      }
+        title: '用户',
+      },
     },
     {
       path: '/users/info',
@@ -22,8 +24,8 @@ export default {
       name: 'myInfo',
       hidden: true,
       meta: {
-        title: '我的信息'
-      }
-    }
-  ]
+        title: '我的信息',
+      },
+    },
+  ],
 }

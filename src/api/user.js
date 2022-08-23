@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 /**
- * 登陆的接口
+ * 登录请求
  * @param {Object} data password mobile
  * @returns promise
  */
@@ -9,41 +9,39 @@ export function login(data) {
   return request({
     url: '/sys/login',
     method: 'POST',
-    data
+    data,
   })
 }
 /**
- * 获取基本信息
+ * 获取用户信息
  * @returns promise
  */
-export const getUserInfoApi = () => {
+export function getUserInfoApi() {
   return request({
     url: '/sys/profile',
-    method: 'POST'
+    method: 'POST',
   })
 }
 
 /**
- * 获取用户详细信息
- * @param {String} id 用户的id
- * @returns parmise
+ * 根据用户id获取员工详情数据
+ * @param {String} id 用户id
+ * @returns promise
  */
-export const getUserDetail = (id) => {
+export function getUserDetail(id) {
   return request({
     url: '/sys/user/' + id,
-    method: 'GET'
   })
 }
 
-/**
- * 更改以后保存
- * @param {*} id
- * @returns
- */
-export const getUserDetailById = (data) => {
+/** *
+ *
+ * 保存员工的基本信息
+ * **/
+export function saveUserDetailById(data) {
   return request({
     url: `/sys/user/${data.id}`,
-    method: 'PUT',
-    data
+    method: 'put',
+    data,
   })
 }

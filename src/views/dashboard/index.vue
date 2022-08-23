@@ -1,25 +1,19 @@
 <template>
   <div class="dashboard-container">
-    {{ $t('message.hello') }}
-    <br />
-    {{ $t('hello') }}
+    <!-- $t('环境里面的数据') -->
     <!-- 头部内容 -->
     <el-card class="header-card">
       <div>
         <div class="fl headL">
           <div class="headImg">
             <img
-              v-imgError="require('@/assets/common/bigUserHeader.png')"
+              v-imgError="require('@/assets/common/head.jpg')"
               :src="$store.getters.avatar"
             />
           </div>
           <div class="headInfoTip">
-            <p class="firstChild">
-              早安，{{ $store.getters.name }}，祝你开心每一天！
-            </p>
-            <p class="lastChild">
-              早安，{{ $store.getters.name }}，祝你开心每一天！
-            </p>
+            <p class="firstChild">早安，管理员，祝你开心每一天！</p>
+            <p class="lastChild">早安，管理员，祝你开心每一天！</p>
           </div>
         </div>
         <div class="fr" />
@@ -32,10 +26,10 @@
         <!-- 工作日历 -->
         <el-card class="box-card">
           <div slot="header" class="header">
-            <span>工作日历</span>
+            <span>{{ $t('dashboard.calendar') }}</span>
           </div>
           <!-- 放置日历组件 -->
-          <Calendar></Calendar>
+          <Calendar />
         </el-card>
         <!-- 公告 -->
         <el-card class="box-card">
@@ -141,15 +135,16 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Radar from './components/radar.vue'
+import Radar from './components/radar'
+
 export default {
   name: 'Dashboard',
   computed: {
-    ...mapGetters(['name'])
+    ...mapGetters(['name']),
   },
   components: {
-    Radar
-  }
+    Radar,
+  },
 }
 </script>
 

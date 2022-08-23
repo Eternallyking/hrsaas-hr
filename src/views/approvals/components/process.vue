@@ -74,7 +74,7 @@
 <script>
 import { getEmploySimple } from '@/api/employees'
 import { process } from '@/api/approvals'
-import commonApi from '@/api/approvals'
+import commonApi from '@/constant/approvals'
 export default {
   name: 'Setting',
   props: ['setData'],
@@ -85,10 +85,10 @@ export default {
       Data: [],
       formData: {
         processType: '',
-        points: []
+        points: [],
       },
       tempList: [],
-      baseData: commonApi
+      baseData: commonApi,
     }
   },
   // 创建完毕状态
@@ -115,7 +115,7 @@ export default {
         var userData = this.tempList[i].user.join(',')
         var data = {
           name: this.tempList[i].name,
-          users: userData
+          users: userData,
         }
         this.formData.points.push(data)
       }
@@ -134,13 +134,13 @@ export default {
         this.tempList = this.tempList || []
         this.tempList.push({
           name: '',
-          key: Date.now()
+          key: Date.now(),
         })
       } else {
         this.$message.error('节点不能超过5个')
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -5,17 +5,18 @@
       class="drawer-bg"
       @click="handleClickOutside"
     />
+    <!-- 侧边栏 -->
     <sidebar class="sidebar-container" />
-    <!-- 主题内容 -->
+    <!-- 主体内容 -->
     <div class="main-container">
-      <!-- 固定的头部 -->
+      <!-- 头部 -->
       <div :class="{ 'fixed-header': fixedHeader }">
-        <!-- 头部导航 -->
+        <!-- 头部navbar组件 -->
         <navbar />
         <!-- 页签 -->
-        <TagsView></TagsView>
+        <tags-view />
       </div>
-      <!-- 内容部分 layout的二级路由 -->
+      <!-- 肯定是子路由占位 -->
       <app-main />
     </div>
   </div>
@@ -31,7 +32,7 @@ export default {
     Navbar,
     Sidebar,
     AppMain,
-    TagsView
+    TagsView,
   },
   mixins: [ResizeMixin],
   computed: {
@@ -49,15 +50,15 @@ export default {
         hideSidebar: !this.sidebar.opened,
         openSidebar: this.sidebar.opened,
         withoutAnimation: this.sidebar.withoutAnimation,
-        mobile: this.device === 'mobile'
+        mobile: this.device === 'mobile',
       }
-    }
+    },
   },
   methods: {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
-    }
-  }
+    },
+  },
 }
 </script>
 

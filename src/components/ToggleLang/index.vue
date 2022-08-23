@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown @command="onComand">
+  <el-dropdown @command="onCommand">
     <span class="el-dropdown-link">
       <svg-icon style="color: #fff; font-size: 20px" icon-class="language" />
     </span>
@@ -9,9 +9,8 @@
         v-for="(value, key) in messages"
         :key="key"
         :command="key"
+        >{{ value.name }}</el-dropdown-item
       >
-        {{ value.name }}
-      </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
@@ -23,22 +22,21 @@ export default {
   name: 'ToggleLang',
   data() {
     return {
-      messages
+      messages,
     }
   },
 
   created() {},
 
   methods: {
-    onComand(val) {
-      // 变换语言需要刷新  给切换语言持久化
+    onCommand(val) {
+      // console.log(val)
+      this.$i18n.locale = val
       this.$router.go(0)
       Cookie.set('lang', val)
-      // console.log('切换语言')
-      this.$i18n.locale = val
-    }
-  }
+    },
+  },
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="less"></style>

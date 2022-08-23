@@ -97,8 +97,8 @@ export default {
       page: {
         page: 1,
         total: 0,
-        pageSize: 10
-      }
+        pageSize: 10,
+      },
     }
   },
   created() {
@@ -110,7 +110,7 @@ export default {
       this.loading = true
       const { rows, total } = await getApprovalList({
         year: 2018,
-        ...this.page
+        ...this.page,
       })
       this.page.total = total
       this.list = rows
@@ -121,27 +121,27 @@ export default {
       switch (name) {
         case '工资':
           this.$router.push({
-            path: '/approvals/salaryApproval/' + obj.processId
+            path: '/approvals/salaryApproval/' + obj.processId,
           })
           break
         case '入职':
           this.$router.push({
-            path: '/approvals/enterApproval/' + obj.processId
+            path: '/approvals/enterApproval/' + obj.processId,
           })
           break
         case '请假':
           this.$router.push({
-            path: '/approvals/leaveApproval/' + obj.processId
+            path: '/approvals/leaveApproval/' + obj.processId,
           })
           break
         case '离职':
           this.$router.push({
-            path: '/approvals/quitApproval/' + obj.processId
+            path: '/approvals/quitApproval/' + obj.processId,
           })
           break
         case '加班':
           this.$router.push({
-            path: '/approvals/overtimeApproval/' + obj.processId
+            path: '/approvals/overtimeApproval/' + obj.processId,
           })
       }
     },
@@ -149,7 +149,7 @@ export default {
     changePage(newPage) {
       this.page.newPage = newPage
       this.getApprovalList()
-    }
-  }
+    },
+  },
 }
 </script>

@@ -107,7 +107,7 @@
               <el-button type="text" size="mini">
                 <router-link
                   :to="{
-                    path: '/salarys/details/' + yearMonth + '/' + scope.row.id
+                    path: '/salarys/details/' + yearMonth + '/' + scope.row.id,
                   }"
                   >查看</router-link
                 >
@@ -156,7 +156,7 @@ import {
   getSalarysList,
   getTips,
   getSalaryDetail,
-  getCompanySetting
+  getCompanySetting,
 } from '@/api/salarys'
 import EmployeeData from '@/constant/employees'
 import { getDepartments } from '@/api/departments'
@@ -180,25 +180,25 @@ export default {
       page: {
         total: 0,
         page: 1,
-        pageSize: 10
+        pageSize: 10,
       },
       tips: {},
       yearMonth: '',
       formData: {
         approvalsTypeChecks: [],
         approvalsStateChecks: [],
-        departmentChecks: []
+        departmentChecks: [],
       },
       selectedSalaryInfo: {},
       selectUserId: null,
-      currentComponent: ''
+      currentComponent: '',
     }
   },
   computed: {
     tipsInfo() {
       // return `本月${this.tips.dateRange}：入职 ${this.tips.worksCount} 离职 ${this.tips.leavesCount} 调薪 ${this.tips.adjustCount} 未定薪 ${this.tips.unGradingCount}`
       return `本月0：入职 0 离职 0 调薪 0 未定薪 0`
-    }
+    },
   },
   created() {
     this.getSalarysList() // 获取工资
@@ -218,7 +218,7 @@ export default {
       this.loading = true
       const { rows, total } = await getSalarysList({
         ...this.page,
-        ...this.formData
+        ...this.formData,
       })
       this.list = rows
       this.page.total = total
@@ -253,7 +253,7 @@ export default {
     changeParams() {
       this.page.page = 1 // 重置第一页
       this.getSalarysList() // 重新拉取工资数据
-    }
-  }
+    },
+  },
 }
 </script>

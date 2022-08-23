@@ -88,7 +88,7 @@ export default {
   data() {
     return {
       user: {},
-      ruleForm: {}
+      ruleForm: {},
     }
   },
   computed: {
@@ -116,7 +116,7 @@ export default {
     },
     computeChangeSize() {
       return this.computeChangeTotal - this.computeCurrentTotal
-    }
+    },
   },
   created() {
     this.getUserDetailById()
@@ -136,8 +136,8 @@ export default {
     },
     async getUserDetailById() {
       this.user = await getUserDetailById(this.userId)
-    }
-  }
+    },
+  },
 }
 </script>
 

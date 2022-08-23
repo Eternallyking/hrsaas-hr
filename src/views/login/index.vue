@@ -1,33 +1,31 @@
 <template>
   <div class="login-container">
+    <!-- 表单校验 1. 添加model属性: 整个表单数据 -->
+    <!-- 表单校验 2. 添加rules属性: 整个表单校验规则 -->
     <el-form
       ref="loginForm"
-      :model="loginForm"
-      :rules="loginFormRules"
       class="login-form"
       auto-complete="on"
       label-position="left"
+      :model="loginForm"
+      :rules="loginFormRules"
     >
+      <!-- 放置标题图片 @是设置的别名-->
       <div class="title-container">
         <h3 class="title">
-          <!-- 放置标题图片 @是设置的别名-->
-          <div class="title-container">
-            <h3 class="title">
-              <img src="@/assets/common/login-logo.png" alt="" />
-            </h3>
-          </div>
+          <img src="@/assets/common/login-logo.png" alt="" />
         </h3>
       </div>
 
-      <!-- 表单内容 -->
-      <!-- 账号 -->
+      <!-- 表单区域 -->
       <el-form-item prop="mobile">
         <i class="el-icon-user-solid svg-container"></i>
         <el-input v-model="loginForm.mobile"></el-input>
       </el-form-item>
-      <!-- 密码 -->
       <el-form-item prop="password">
-        <i class="svg-container"> <svg-icon iconClass="password"></svg-icon></i>
+        <i class="svg-container">
+          <svg-icon iconClass="password"></svg-icon>
+        </i>
         <el-input type="password" v-model="loginForm.password"></el-input>
       </el-form-item>
 
@@ -35,14 +33,13 @@
         type="primary"
         class="loginBtn"
         style="width: 100%; margin-bottom: 30px"
+        :loading="isLogin"
         @click="login"
-        :loading="isLoading"
+        >登录</el-button
       >
-        登录
-      </el-button>
 
       <div class="tips">
-        <span style="margin-right: 20px">账号: 13800000002</span>
+        <span style="margin-right: 20px">用户名: 13800000002</span>
         <span> 密码: 123456</span>
       </div>
     </el-form>
@@ -54,49 +51,48 @@ export default {
   name: 'Login',
   data() {
     return {
-      // 定义数据
+      // 1. 定义数据
       loginForm: {
-        mobile: '13800000003',
-        password: '123456'
+        mobile: '13800000002',
+        password: '123456',
       },
-      // 校验规则
       loginFormRules: {
+        // 规则名和数据名保持一致
         mobile: [
           { required: true, message: '请输入手机号', trigger: 'blur' },
           {
             pattern: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
-            message: '手机号格式错误',
-            trigger: 'blur'
-          }
+            message: '手机号码格式不正确',
+            trigger: 'blur',
+          },
         ],
         password: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
+          { required: true, message: '请输入密码', trigger: 'blur' },
           // {
           //   pattern:
           //     /^(?![a-zA-Z]+$)(?![A-Z0-9]+$)(?![A-Z\W_!@#$%^&*`~()-+=]+$)(?![a-z0-9]+$)(?![a-z\W_!@#$%^&*`~()-+=]+$)(?![0-9\W_!@#$%^&*`~()-+=]+$)[a-zA-Z0-9\W_!@#$%^&*`~()-+=]/,
-          //   message: '密码格式错误',
-          //   trigger: 'blur'
-          // }
-        ]
+          //   message: '密码请包含数字字母特殊字符,并且不能少于6位',
+          //   trigger: 'blur',
+          // },
+        ],
       },
-      isLoading: false
+      isLogin: false,
     }
   },
   methods: {
     async login() {
-      this.isLoading = true
+      // console.log('点击登录')
+      this.isLogin = true
       try {
         await this.$refs.loginForm.validate()
-        // console.log(1)
         await this.$store.dispatch('user/getToken', this.loginForm)
         this.$router.push('/')
-        this.$message.success('登陆成功')
-      } catch (error) {
+        this.$message.success('登录成功')
       } finally {
-        this.isLoading = false
+        this.isLogin = false
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -116,10 +112,14 @@ $cursor: #68b0fe;
 
 /* reset element-ui css */
 .login-container {
-  background-image: url('~@/assets/common/login.jpg'); // 设置背景图片
-  background-position: center; // 将图片位置设置为充满整个屏幕
   .el-form-item__error {
     color: #fff;
+  }
+  .loginBtn {
+    background: #407ffe;
+    height: 64px;
+    line-height: 32px;
+    font-size: 24px;
   }
   .el-input {
     display: inline-block;
@@ -149,12 +149,6 @@ $cursor: #68b0fe;
     border-radius: 5px;
     color: #454545;
   }
-  .loginBtn {
-    background: #407ffe;
-    height: 64px;
-    line-height: 32px;
-    font-size: 24px;
-  }
 }
 </style>
 
@@ -166,7 +160,8 @@ $light_gray: #eee;
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  background-image: url('~@/assets/common/login.jpg'); // 设置背景图片
+  background-position: center; // 将图片位置设置为充满整个屏幕
   overflow: hidden;
 
   .login-form {

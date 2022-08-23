@@ -227,25 +227,25 @@ export default {
         getInfo: '',
         name: '',
         counts: '',
-        tobeTaskCount: ''
+        tobeTaskCount: '',
       },
       formData: {
         page: 1,
         pagesize: 10,
         keyword: this.keyword,
         deptID: [], // 性别
-        stateID: ''
+        stateID: '',
       },
       page: {
         page: 1,
         pagesize: 10,
-        total: 0
+        total: 0,
       },
       modifyData: {
         userId: '',
         day: '',
-        adtStatu: ''
-      }
+        adtStatu: '',
+      },
     }
   },
   // 创建完毕状态
@@ -280,7 +280,7 @@ export default {
     async getAttendancesList() {
       this.loading = true
       const { data, monthOfReport, tobeTaskCount } = await getAttendancesList({
-        ...this.page
+        ...this.page,
       })
       this.list = data.rows // 当前记录
       this.page.total = data.total // 总条数
@@ -320,8 +320,8 @@ export default {
         this.attendInfo.name = item.name
         this.centerDialogVisible = true
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -330,8 +330,8 @@ export default {
         user: {},
         userSocialSecurity: {
           socialSecurityBase: 3387,
-          industrialInjuryRatio: 0.2
-        }
+          industrialInjuryRatio: 0.2,
+        },
       },
       cityList: [],
       paymentItemList: [],
@@ -341,67 +341,67 @@ export default {
       isPayProvidentInMonth: false,
       rules: {
         participatingInTheCity: [
-          { required: true, message: '请选择参保城市1234', trigger: 'change' }
+          { required: true, message: '请选择参保城市1234', trigger: 'change' },
         ],
         socialSecurityType: [
-          { required: true, message: '请选择社保类型', trigger: 'change' }
+          { required: true, message: '请选择社保类型', trigger: 'change' },
         ],
         householdRegistrationType: [
-          { required: true, message: '请选择户籍类型', trigger: 'change' }
+          { required: true, message: '请选择户籍类型', trigger: 'change' },
         ],
         socialSecurityBase: [
           {
             required: true,
             validator: validateSocialSecurityBase,
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         industrialInjuryRatio: [
           {
             required: true,
             validator: validateIndustrialInjuryRatio,
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         providentFundCity: [
-          { required: true, message: '请选择公积金城市', trigger: 'change' }
+          { required: true, message: '请选择公积金城市', trigger: 'change' },
         ],
         providentFundBase: [
           {
             required: true,
             validator: validateProvidentFundBase,
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         enterpriseProportion: [
           {
             required: true,
             validator: validateEnterpriseProportion,
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         personalProportion: [
           {
             required: true,
             validator: validatePersonalProportion,
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         enterpriseProvidentFundPayment: [
           {
             required: true,
             message: '请输入公司公积金缴纳数额',
-            trigger: 'change'
-          }
+            trigger: 'change',
+          },
         ],
         personalProvidentFundPayment: [
           {
             required: true,
             message: '请输入个人公积金缴纳数额',
-            trigger: 'change'
-          }
-        ]
-      }
+            trigger: 'change',
+          },
+        ],
+      },
     }
   },
   computed: {
@@ -454,7 +454,7 @@ export default {
           this.sizeForm.userSocialSecurity.providentFundBase) /
           100
       ).toFixed(2)
-    }
+    },
   },
   watch: {
     'sizeForm.userSocialSecurity.providentFundBase': function () {
@@ -475,7 +475,7 @@ export default {
       function () {
         this.isPayProvidentInMonth =
           this.sizeForm.enterprisesPayTheProvidentFundThisMonth === 1
-      }
+      },
   },
   created() {
     this.sizeForm.userId = this.$route.params.id
@@ -538,8 +538,8 @@ export default {
             this.sizeForm.userSocialSecurity.providentFundBase) /
             100
         ).toFixed(2)
-    }
-  }
+    },
+  },
 }
 </script>
 

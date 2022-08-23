@@ -2,37 +2,35 @@ import router, { constantRoutes, asyncRoutes } from '@/router'
 export default {
   namespaced: true,
   state: {
-    routes: [], // 自己维护的静态路由 + 动态路由
-    points: [] // 按钮权限
+    routes: [], // 我们自己维护的路由规则,所有路由规则(静态路由 + 筛选后的动态路由)
+    points: [], // 按钮权限
   },
   mutations: {
-    // 设置路由权限
     setRoutes(state, routes) {
       state.routes = [...constantRoutes, ...routes]
     },
-    // 设置按钮权限
-    setPoints(state, points) {
-      state.points = points
-    }
+    setPoints(state, payload) {
+      state.points = payload
+    },
   },
   actions: {
-    fliterRoutes(context, roles) {
+    filterRoutes(context, roles) {
+      // console.log(asyncRoutes)
       const routes = asyncRoutes.filter((item) => {
-        // 如果权限标识在roles.menus ， 有这个权限  不在则没有权限
+        // 如果权限标识在roles.menus, 有这个权限 返回true
+        // 如果权限标识不在roles.menus, 没有这个权限 返回false
         return roles.menus.includes(item.meta.id)
       })
-      context.commit('setRoutes', routes) // 路由权限
-      context.commit('setPoints', roles.points) // 按钮权限
-      //   console.log(routes)
-      // vue提供了动态路由添加的方法
+      context.commit('setRoutes', routes)
+      // 怎么动态添加路由规则?
+      // console.log(routes)
       router.addRoutes([
         ...routes,
-        { path: '*', redirect: '/404', hidden: true }
+        { path: '*', redirect: '/404', hidden: true },
       ])
-    }
-    // setPointsAction(context, points) {
-    //   context.commit('setPoints', points)
-    // }
+    },
+    setPointsAction(context, points) {
+      context.commit('setPoints', points)
+    },
   },
-  getters: {}
 }

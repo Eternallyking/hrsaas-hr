@@ -91,32 +91,32 @@ import {
   approvalsDel,
   approvalsPass,
   approvalsReject,
-  applyDimission
+  applyDimission,
 } from '@/api/approvals'
 export default {
   name: 'UsersTableIndex',
   props: {
     selectedId: {
       type: String,
-      default: ''
+      default: '',
     },
     tabLab: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data() {
     return {
       dialogImageUrl: '',
       dialogVisible: false,
       timeValue: '',
-      ruleForm: {}
+      ruleForm: {},
     }
   },
   computed: {
     computeOpType() {
       return this.ruleForm.stateOfApproval !== '已撤销'
-    }
+    },
   },
   created() {
     this.init()
@@ -162,8 +162,8 @@ export default {
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url
       this.dialogVisible = true
-    }
-  }
+    },
+  },
 }
 </script>
 

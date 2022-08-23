@@ -4,7 +4,9 @@ const salaryRouter = {
   path: '/salarys',
   component: Layout,
   name: 'salarys',
-  meta: { id: 'salarys' },
+  meta: {
+    id: 'salarys', // 用来和后端权限做约定的
+  },
   children: [
     {
       path: '',
@@ -12,8 +14,8 @@ const salaryRouter = {
       name: 'salarys',
       meta: {
         title: '工资',
-        icon: 'money'
-      }
+        icon: 'money',
+      },
     },
     {
       path: 'setting',
@@ -21,8 +23,8 @@ const salaryRouter = {
       name: 'salarysSetting',
       hidden: true,
       meta: {
-        title: '设置'
-      }
+        title: '设置',
+      },
     },
     {
       path: 'details/:yearMonth/:id',
@@ -30,8 +32,8 @@ const salaryRouter = {
       name: 'salarysDetails',
       hidden: true,
       meta: {
-        title: '详情'
-      }
+        title: '详情',
+      },
     },
     {
       path: 'historicalArchiving',
@@ -39,8 +41,8 @@ const salaryRouter = {
       name: 'salarysHistorical',
       hidden: true,
       meta: {
-        title: '历史归档'
-      }
+        title: '历史归档',
+      },
     },
     {
       path: 'monthStatement',
@@ -48,9 +50,9 @@ const salaryRouter = {
       name: 'salarysMonthStatement',
       hidden: true,
       meta: {
-        title: '月报表'
-      }
-    }
-  ]
+        title: '月报表',
+      },
+    },
+  ],
 }
 export default salaryRouter

@@ -200,9 +200,9 @@ import {
   approvalsDel,
   approvalsPass,
   approvalsReject,
-  getFlowList
+  getFlowList,
 } from '@/api/approvals'
-import baseApi from '@/api/approvals'
+import baseApi from '@/constant/approvals'
 import Quit from './components/quit'
 import Leave from './components/leave-job'
 import Overtime from './components/overtime'
@@ -212,7 +212,7 @@ export default {
   components: {
     Quit,
     Leave,
-    Overtime
+    Overtime,
   },
 
   data() {
@@ -234,19 +234,19 @@ export default {
         page: 1,
         pageSize: 10,
         process_key$equal: this.process_key$equal,
-        process_state$in: this.process_state$in
+        process_state$in: this.process_state$in,
         // proc_apply_user_id$equal:''
       },
       adoptVisible: false,
       formData: {
         handleOpinion: '',
         processId: '',
-        handleType: ''
-      }
+        handleType: '',
+      },
     }
   },
   computed: {
-    ...mapGetters(['userId'])
+    ...mapGetters(['userId']),
   },
   created() {
     this.getApprovalList()
@@ -335,7 +335,7 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
-        center: true
+        center: true,
       }).then(() => {
         this.rejectProcess(id)
       })
@@ -386,8 +386,8 @@ export default {
       this.$confirm('确认关闭？').then((_) => {
         done()
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

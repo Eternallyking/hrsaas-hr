@@ -69,7 +69,7 @@
 import {
   getApprovalsDetail,
   getApprovalsTaskDetail,
-  downImg
+  downImg,
 } from '@/api/approvals'
 export default {
   name: 'UsersTableIndex',
@@ -78,10 +78,10 @@ export default {
       approvalId: this.$route.params.id,
 
       information: {
-        data: {}
+        data: {},
       },
       taskInstanceOutList: [],
-      imgs: ''
+      imgs: '',
     }
   },
   created() {
@@ -110,7 +110,7 @@ export default {
     },
     imgHandle(obj) {
       return window.URL.createObjectURL(obj)
-    }
-  }
+    },
+  },
 }
 </script>

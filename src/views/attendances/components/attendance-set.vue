@@ -36,7 +36,7 @@
                 :picker-options="{
                   start: '00:00',
                   step: '00:05',
-                  end: '23:59'
+                  end: '23:59',
                 }"
                 :placeholder="formBase.morningStartTime"
                 class="timePicker"
@@ -46,7 +46,7 @@
                 :picker-options="{
                   start: '08:30',
                   step: '00:15',
-                  end: '18:30'
+                  end: '18:30',
                 }"
                 :placeholder="formBase.morningEndTime"
                 class="timePicker"
@@ -56,7 +56,7 @@
                 :picker-options="{
                   start: '08:30',
                   step: '00:15',
-                  end: '18:30'
+                  end: '18:30',
                 }"
                 :placeholder="formBase.afternoonStartTime"
                 class="timePicker"
@@ -66,7 +66,7 @@
                 :picker-options="{
                   start: '08:30',
                   step: '00:15',
-                  end: '18:30'
+                  end: '18:30',
                 }"
                 :placeholder="formBase.afternoonEndTime"
                 class="timePicker"
@@ -376,7 +376,7 @@
                           :picker-options="{
                             start: '01:00',
                             step: '00:15',
-                            end: '23:59'
+                            end: '23:59',
                           }"
                           style="width: 100px"
                           :disabled="item.isTimeOff === false"
@@ -387,7 +387,7 @@
                             start: '01:00',
                             step: '00:15',
                             end: '23:59',
-                            minTime: item.startTime
+                            minTime: item.startTime,
                           }"
                           style="width: 100px"
                           :disabled="item.isTimeOff === false"
@@ -439,7 +439,7 @@
 </template>
 
 <script>
-import { addEmployee } from '@/api/employess'
+import { addEmployee } from '@/api/employees'
 import { getInteger, getIntegerPoint } from '@/filters'
 import { getDepartments } from '@/api/departments'
 import {
@@ -450,7 +450,7 @@ import {
   deductionsSave,
   getDeductions,
   overtimeSave,
-  getOvertime
+  getOvertime,
 } from '@/api/attendances'
 import attendanceApi from '@/constant/attendance'
 import * as commonApi from '@/utils'
@@ -468,13 +468,13 @@ export default {
         morningEndTime: '',
         afternoonStartTime: '',
         afternoonEndTime: '',
-        departmentId: ''
+        departmentId: '',
       },
       leaveBase: {
-        departmentId: ''
+        departmentId: '',
       },
       deductionsBase: {
-        departmentId: ''
+        departmentId: '',
       },
       overtimeBase: {
         departmentId: '',
@@ -482,7 +482,7 @@ export default {
         isCompensationint: false,
         latestEffectDate: '',
         unit: '',
-        rules: attendanceApi.overtimeType
+        rules: attendanceApi.overtimeType,
       },
       departmentData: [],
       stateData: [],
@@ -493,36 +493,36 @@ export default {
         // 表单验证
         // name: [{ required: true, message: "请输入活动名称", trigger: "blur" }],
         departmentId: [
-          { required: true, message: '请选择部门', trigger: 'change' }
+          { required: true, message: '请选择部门', trigger: 'change' },
         ],
         morningStartTime: [
-          { required: true, message: '请选择时间', trigger: 'change' }
-        ]
+          { required: true, message: '请选择时间', trigger: 'change' },
+        ],
       },
       overtimeRule: {
         // 表单验证
         unit: [
-          { required: true, message: '调休单位不能为空(', trigger: 'blur' }
+          { required: true, message: '调休单位不能为空(', trigger: 'blur' },
         ],
         departmentId: [
-          { required: true, message: '请选择部门', trigger: 'change' }
+          { required: true, message: '请选择部门', trigger: 'change' },
         ],
         isClock: [
-          { required: true, message: '请选择打卡验证', trigger: 'change' }
+          { required: true, message: '请选择打卡验证', trigger: 'change' },
         ],
         isCompensationint: [
-          { required: true, message: '请选择补偿', trigger: 'change' }
+          { required: true, message: '请选择补偿', trigger: 'change' },
         ],
         latestEffectDate: [
-          { required: true, message: '请选择时间', trigger: 'change' }
-        ]
-      }
+          { required: true, message: '请选择时间', trigger: 'change' },
+        ],
+      },
     }
   },
   computed: {
     inpNum() {
       return this.oldNum
-    }
+    },
   },
   // 创建完毕状态
   created() {
@@ -785,8 +785,8 @@ export default {
         this.$message.error('请选择部门')
         return false
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

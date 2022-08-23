@@ -4,7 +4,9 @@ export default {
   path: '/approvals',
   component: Layout,
   name: 'approvals',
-  meta: { id: 'approvals' },
+  meta: {
+    id: 'approvals', // 用来和后端权限做约定的
+  },
   children: [
     {
       path: '',
@@ -12,8 +14,8 @@ export default {
       name: 'approvals',
       meta: {
         title: '审批',
-        icon: 'tree-table'
-      }
+        icon: 'tree-table',
+      },
     },
     {
       path: 'salaryApproval/:id',
@@ -23,8 +25,8 @@ export default {
       meta: {
         title: '工资审核',
         icon: 'approval',
-        noCache: true
-      }
+        noCache: true,
+      },
     },
     {
       path: 'enterApproval/:id',
@@ -34,8 +36,8 @@ export default {
       meta: {
         title: '入职审核',
         icon: 'approval',
-        noCache: true
-      }
+        noCache: true,
+      },
     },
     {
       path: 'leaveApproval/:id',
@@ -45,8 +47,8 @@ export default {
       meta: {
         title: '申请请假',
         icon: 'approval',
-        noCache: true
-      }
+        noCache: true,
+      },
     },
     {
       path: 'quitApproval/:id',
@@ -56,8 +58,8 @@ export default {
       meta: {
         title: '申请离职',
         icon: 'approval',
-        noCache: true
-      }
+        noCache: true,
+      },
     },
     {
       path: 'overtimeApproval/:id',
@@ -67,8 +69,8 @@ export default {
       meta: {
         title: '加班申请',
         icon: 'approval',
-        noCache: true
-      }
+        noCache: true,
+      },
     },
     {
       path: 'securitySetting',
@@ -78,8 +80,8 @@ export default {
       meta: {
         title: '设置',
         icon: 'approval',
-        noCache: true
-      }
-    }
-  ]
+        noCache: true,
+      },
+    },
+  ],
 }

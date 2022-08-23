@@ -1,9 +1,10 @@
 import store from '@/store'
-// 自定义 图片加载失败指令
+// 定义自定义指令
 export const imgError = {
-  // 图片插入失败的回调
-  inserted: function (el, { value }) {
-    // dom元素的src = 传递的属性  解构value 就是图片的地址
+  // 当被绑定的元素插入到 DOM 中时……
+  // 令绑定的元素插入到dom的时候 ,图片数据还没请求回来
+  inserted(el, { value }) {
+    // 监听dom img 图片加载失败的事件
     if (!el.src) {
       el.src = value
     } else {
@@ -12,26 +13,26 @@ export const imgError = {
       }
     }
   },
-  // 指令绑定的dom元素更新的时候执行
   update(el, { value }) {
+    // 监听dom img 图片加载失败的事件
     if (!el.src) {
       el.src = value
+    } else {
+      el.onerror = function () {
+        el.src = value
+      }
     }
-  }
+  },
 }
 
-// 自定义按钮权限指令
 export const isHas = {
-  // bind : 指令和dom绑定
-  // inserted: 指令所绑定的dom插入到父节点中
-  // updated: 指令所绑定的 Vnode>>就是虚拟dom
+  // bind: 指令和dom绑定
+  // inserted: 指令所绑定的元素插入到父节点
+  // update: 指令所绑定的Vnode
   inserted(el, binding) {
-    console.log(binding)
-    // 是否在权限组中
     const has = store.state.permission.points.includes(binding.value)
-    //  不在的话就删除dom
     if (!has) {
       el.remove()
     }
-  }
+  },
 }

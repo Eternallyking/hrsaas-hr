@@ -78,7 +78,7 @@
 import {
   getApprovalsDetail,
   getApprovalsTaskDetail,
-  downImg
+  downImg,
 } from '@/api/approvals'
 export default {
   name: 'UsersTableIndex',
@@ -87,10 +87,10 @@ export default {
     return {
       approvalId: this.$route.params.id,
       information: {
-        data: {}
+        data: {},
       },
       taskInstanceOutList: [],
-      imgs: ''
+      imgs: '',
     }
   },
   created() {
@@ -116,7 +116,7 @@ export default {
             ''
           )
         )
-    }
-  }
+    },
+  },
 }
 </script>

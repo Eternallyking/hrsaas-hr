@@ -4,7 +4,9 @@ const attendRouter = {
   path: '/attendances',
   component: Layout,
   name: 'attendances',
-  meta: { id: 'attendances' },
+  meta: {
+    id: 'attendances', // 用来和后端权限做约定的
+  },
   children: [
     {
       path: '',
@@ -12,8 +14,8 @@ const attendRouter = {
       name: 'attendances',
       meta: {
         title: '考勤',
-        icon: 'excel'
-      }
+        icon: 'excel',
+      },
     },
     {
       path: 'archiving',
@@ -21,8 +23,8 @@ const attendRouter = {
       name: 'archiving',
       hidden: true,
       meta: {
-        title: '归档'
-      }
+        title: '归档',
+      },
     },
     {
       path: 'report/:month',
@@ -30,9 +32,9 @@ const attendRouter = {
       name: 'reports',
       hidden: true,
       meta: {
-        title: '报表'
-      }
-    }
-  ]
+        title: '报表',
+      },
+    },
+  ],
 }
 export default attendRouter

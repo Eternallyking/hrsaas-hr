@@ -1,32 +1,45 @@
 import router, { asyncRoutes } from '@/router'
 import store from '@/store'
 // 路由(全局)前置守卫
+// 路由(全局)后置守卫
+// 路由独享守卫
+// 组件内守卫
 // 会在所有路由进入之前触发
 // to: 去哪里的路由信息
 // from: 来自于哪个路由的信息
 // next: 是否进入
-const list = ['/login', '/404'] //设置白名单
+const whiteList = ['/login', '/404']
 router.beforeEach(async (to, from, next) => {
-  //to and from are Route Object,next() must be called to resolve the hook
-  // 判断有没有token
   const token = store.state.user.token
   if (token) {
     if (!store.state.user.userInfo.userId) {
-      // 获取用户信息  store.dispatch得返回值是promise
+      // 获取用户信息 store.dispatch的返回值是promise
       const { roles } = await store.dispatch('user/getUserInfo')
-      console.log(roles.points)
-      await store.dispatch('permission/fliterRoutes', roles)
-      // 传递按钮权限
-      // await store.dispatch('permission/setPointsAction', roles.points)
+
+      await store.dispatch('permission/filterRoutes', roles)
+      await store.dispatch('permission/setPointsAction', roles.points)
       next(to.path)
     }
-    //   有token 在login页面就跳到根路径
-    if (to.path === '/login') return next('/')
-    next() // 不去login就放行
+
+    // 1. 登录
+    // 是否进入登录页
+    if (to.path === '/login') {
+      // 1.1 是 跳到首页
+      next('/')
+    } else {
+      // 1.2 不是 直接进入
+      next()
+    }
   } else {
-    //   没有token
-    const isClude = list.includes(to.path)
-    if (isClude) return next() //在白名单中就放行  不需要登录的页面
-    next('/login') // 不在白名单中就去登录页
+    // 2. 未登录
+    // 访问的是否在白名单(未登录也能访问的页面)
+    const isCludes = whiteList.includes(to.path)
+    if (isCludes) {
+      // 2.1 在白名单 放行
+      next()
+    } else {
+      // 2.2 不在白名单(不登录不能访问) 跳到登录页
+      next('/login')
+    }
   }
 })

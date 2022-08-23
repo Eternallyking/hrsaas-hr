@@ -1,8 +1,8 @@
 <template>
   <div class="calendar">
     <el-row type="flex" justify="end">
-      <el-col :span="4">
-        <el-select @change="updateCalecdar" v-model="currentYears">
+      <el-col :span="5">
+        <el-select @change="updateCalendar" v-model="currentYear">
           <el-option
             v-for="item in years"
             :key="item"
@@ -13,27 +13,17 @@
         </el-select>
       </el-col>
       <el-col :span="3">
-        <el-select @change="updateCalecdar" v-model="currentMonth">
+        <el-select @change="updateCalendar" v-model="currentMonth">
           <el-option v-for="item in 12" :key="item" :label="item" :value="item">
           </el-option>
         </el-select>
       </el-col>
     </el-row>
-    <!--  -->
     <el-calendar v-model="currentDate">
       <template v-slot:dateCell="{ date }">
-        <div
-          style="
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-          "
-        >
+        <div class="cell-box">
           {{ date.getDate() }}
-          <span style="margin-left: 5px; color: red" v-if="isWeek(date)"
-            >休</span
-          >
+          <span v-if="isWeek(date)">休</span>
         </div>
       </template>
     </el-calendar>
@@ -45,35 +35,48 @@ export default {
   name: 'Calendar',
   data() {
     return {
-      currentYears: 2022,
-      currentMonth: 8,
-      years: [],
-      currentDate: 4
+      currentYear: '',
+      currentMonth: '',
+      currentDate: '',
+      years: [], // 当前年份的 + 前5年 + 后5年 11
     }
   },
 
   created() {
     this.initCaldndar()
+
+    // const arr = [1, 2, 3, 4, 5, 5, 6]
+    // const newSetArr = new Set(arr)
+    // const newArr = Array.from(newSetArr, (item) => {
+    //   // mdn mapFn
+    //   return item + 1
+    // })
+    // newArr.push(8)
+    // console.log(newArr)
   },
 
   methods: {
     initCaldndar() {
       const date = new Date()
-      this.currentYears = date.getFullYear()
+      this.currentYear = date.getFullYear()
       this.currentMonth = date.getMonth() + 1
-      this.years = Array(11)
-        .fill(this.currentYears - 5)
-        .map((item, index) => item + index)
+      this.years = Array.from(
+        Array(11).fill(this.currentYear - 5),
+        (item, i) => item + i
+      )
+
       this.currentDate = date
     },
     isWeek(date) {
+      // console.log(date.getDay())
       return date.getDay() === 6 || date.getDay() === 0
     },
-    // 切换年月 日历变化
-    updateCalecdar() {
-      this.currentDate = this.currentYears + '-' + this.currentMonth
-    }
-  }
+    // 用于更新日历
+    updateCalendar() {
+      this.currentDate = this.currentYear + '-' + this.currentMonth
+      // console.log(this.currentDate)
+    },
+  },
 }
 </script>
 
@@ -82,10 +85,15 @@ export default {
   .el-calendar__header {
     display: none;
   }
-  .el-calendar__body {
-    .el-calendar-table td {
-      border: none !important;
-    }
+  .el-calendar-table td {
+    border: none !important;
+  }
+  .cell-box {
+    color: green;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
   }
 }
 </style>

@@ -1,5 +1,14 @@
+import enLocale from 'element-ui/lib/locale/lang/en'
 export default {
-    dashboard:{
-        calender:'calender'
-       },
+  name: 'en',
+  dashboard: {
+    calendar: 'calendar',
+    progress: 'progress',
+  },
+  ...enLocale,
+  route: {
+    dashboard: 'dashboard',
+    员工: 'emoployees',
+    组织架构: 'department',
+  },
 }
