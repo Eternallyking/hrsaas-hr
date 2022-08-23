@@ -6,21 +6,25 @@
       @toggleClick="toggleSideBar"
     />
 
+    <!-- <breadcrumb class="breadcrumb-container" /> -->
     <div class="app-breadcrumb">
-      {{ $store.state.user.userInfo.companyName }}
+      {{ userInfo.companyName }}
       <span class="breadBtn">体验版</span>
     </div>
-    <!-- <breadcrumb class="breadcrumb-container" /> -->
 
     <div class="right-menu">
+      <!-- 切换语言 -->
+      <ToggleLang />
+      <!-- 全屏插件 -->
+      <FullScreen />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img
-            :src="$store.state.user.userInfo.staffPhoto"
+            :src="userInfo.staffPhoto"
             class="user-avatar"
-            v-imgError="defaultimg"
+            v-imgError="img"
           />
-          <span>{{ $store.state.user.userInfo.username }}</span>
+          <span>{{ userInfo.username }}</span>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -40,12 +44,11 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import defaultimg from '@/assets/common/head.jpg'
-
+import img from '@/assets/common/bigUserHeader.png'
 export default {
   data() {
     return {
-      defaultimg
+      img
     }
   },
   components: {
@@ -53,7 +56,10 @@ export default {
     Hamburger
   },
   computed: {
-    ...mapGetters(['sidebar', 'avatar'])
+    ...mapGetters(['sidebar', 'avatar']),
+    userInfo() {
+      return this.$store.state.user.userInfo
+    }
   },
   methods: {
     toggleSideBar() {
@@ -72,10 +78,8 @@ export default {
   height: 50px;
   overflow: hidden;
   position: relative;
-  // background: #fff;
   background-image: -webkit-linear-gradient(left, #3d6df8, #5b8cff);
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-
   .app-breadcrumb {
     display: inline-block;
     font-size: 18px;
@@ -102,7 +106,7 @@ export default {
     cursor: pointer;
     transition: background 0.3s;
     -webkit-tap-highlight-color: transparent;
-    color: #fff;
+    color: #ffffff;
     fill: currentColor;
 
     &:hover {
@@ -118,6 +122,7 @@ export default {
     float: right;
     height: 100%;
     line-height: 50px;
+    display: flex;
 
     &:focus {
       outline: none;
@@ -148,12 +153,12 @@ export default {
         position: relative;
         display: flex;
         align-items: center;
-        color: #fff;
-        cursor: pointer;
+        color: #ffffff;
+
         span {
           margin: 0 5px;
+          cursor: pointer;
         }
-
         .user-avatar {
           cursor: pointer;
           width: 40px;

@@ -3,76 +3,43 @@
     <el-form
       ref="loginForm"
       :model="loginForm"
-      :rules="loginFromRules"
+      :rules="loginFormRules"
       class="login-form"
       auto-complete="on"
       label-position="left"
     >
       <div class="title-container">
         <h3 class="title">
-          <img src="@/assets/common/login-logo.png" alt="" />
+          <!-- 放置标题图片 @是设置的别名-->
+          <div class="title-container">
+            <h3 class="title">
+              <img src="@/assets/common/login-logo.png" alt="" />
+            </h3>
+          </div>
         </h3>
       </div>
 
+      <!-- 表单内容 -->
+      <!-- 账号 -->
       <el-form-item prop="mobile">
-        <i class="svg-container">
-          <svg-icon iconClass="user"></svg-icon>
-        </i>
+        <i class="el-icon-user-solid svg-container"></i>
         <el-input v-model="loginForm.mobile"></el-input>
       </el-form-item>
-
+      <!-- 密码 -->
       <el-form-item prop="password">
-        <i class="svg-container">
-          <svg-icon iconClass="password"></svg-icon>
-        </i>
+        <i class="svg-container"> <svg-icon iconClass="password"></svg-icon></i>
         <el-input type="password" v-model="loginForm.password"></el-input>
       </el-form-item>
-
-      <!-- <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
-          type="text"
-          tabindex="1"
-          auto-complete="on"
-        />
-      </el-form-item>
-
-      <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="loginForm.password"
-          :type="passwordType"
-          placeholder="Password"
-          name="password"
-          tabindex="2"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
-        />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon
-            :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
-          />
-        </span>
-      </el-form-item> -->
 
       <el-button
         type="primary"
         class="loginBtn"
         style="width: 100%; margin-bottom: 30px"
-        @click="loginfn"
-        :loading="islogin"
-        >登录</el-button
+        @click="login"
+        :loading="isLoading"
       >
+        登录
+      </el-button>
 
       <div class="tips">
         <span style="margin-right: 20px">账号: 13800000002</span>
@@ -83,71 +50,50 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
-
 export default {
   name: 'Login',
   data() {
-    // const validateUsername = (rule, value, callback) => {
-    //   if (!validUsername(value)) {
-    //     callback(new Error('Please enter the correct user name'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
-    // const validatePassword = (rule, value, callback) => {
-    //   if (value.length < 6) {
-    //     callback(new Error('The password can not be less than 6 digits'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
     return {
+      // 定义数据
       loginForm: {
-        mobile: '13800000002',
+        mobile: '13800000003',
         password: '123456'
       },
-      loginFromRules: {
+      // 校验规则
+      loginFormRules: {
         mobile: [
-          { required: true, message: '请输入账号', trigger: 'blur' },
+          { required: true, message: '请输入手机号', trigger: 'blur' },
           {
             pattern: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
-            message: '手机格式不正确',
+            message: '手机号格式错误',
             trigger: 'blur'
           }
         ],
         password: [
-          { required: true, message: '请输入账号', trigger: 'blur' }
+          { required: true, message: '请输入密码', trigger: 'blur' }
           // {
           //   pattern:
           //     /^(?![a-zA-Z]+$)(?![A-Z0-9]+$)(?![A-Z\W_!@#$%^&*`~()-+=]+$)(?![a-z0-9]+$)(?![a-z\W_!@#$%^&*`~()-+=]+$)(?![0-9\W_!@#$%^&*`~()-+=]+$)[a-zA-Z0-9\W_!@#$%^&*`~()-+=]/,
-          //   message: '密码请包含数字，字母，特殊符号，且不能少于6位',
+          //   message: '密码格式错误',
           //   trigger: 'blur'
           // }
         ]
       },
-      islogin: false
-    }
-  },
-  watch: {
-    $route: {
-      handler: function (route) {
-        this.redirect = route.query && route.query.redirect
-      },
-      immediate: true
+      isLoading: false
     }
   },
   methods: {
-    async loginfn() {
-      this.islogin = true
+    async login() {
+      this.isLoading = true
       try {
         await this.$refs.loginForm.validate()
+        // console.log(1)
         await this.$store.dispatch('user/getToken', this.loginForm)
         this.$router.push('/')
-        this.$message.success('登录成功')
+        this.$message.success('登陆成功')
       } catch (error) {
       } finally {
-        this.islogin = false
+        this.isLoading = false
       }
     }
   }
@@ -160,7 +106,7 @@ export default {
 
 $bg: #283443;
 $light_gray: #68b0fe;
-$cursor: #fff;
+$cursor: #68b0fe;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
@@ -170,6 +116,11 @@ $cursor: #fff;
 
 /* reset element-ui css */
 .login-container {
+  background-image: url('~@/assets/common/login.jpg'); // 设置背景图片
+  background-position: center; // 将图片位置设置为充满整个屏幕
+  .el-form-item__error {
+    color: #fff;
+  }
   .el-input {
     display: inline-block;
     height: 47px;
@@ -198,6 +149,12 @@ $cursor: #fff;
     border-radius: 5px;
     color: #454545;
   }
+  .loginBtn {
+    background: #407ffe;
+    height: 64px;
+    line-height: 32px;
+    font-size: 24px;
+  }
 }
 </style>
 
@@ -210,15 +167,7 @@ $light_gray: #eee;
   min-height: 100%;
   width: 100%;
   background-color: $bg;
-  background-image: url('~@/assets/common/login.jpg'); // 设置背景图片
-  background-position: center; // 将图片位置设置为充满整个屏幕
   overflow: hidden;
-  .loginBtn {
-    background: #407ffe;
-    height: 64px;
-    line-height: 32px;
-    font-size: 24px;
-  }
 
   .login-form {
     position: relative;

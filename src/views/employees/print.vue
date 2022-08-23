@@ -1,5 +1,6 @@
 <template>
   <div class="dashboard-container" id="myPrint">
+    <!-- 打印 -->
     <el-button v-print="'#myPrint'">打印</el-button>
     <div class="app-container">
       <el-card>
@@ -10,6 +11,7 @@
           </el-breadcrumb-item>
           <el-breadcrumb-item>打印</el-breadcrumb-item>
         </el-breadcrumb>
+        <!-- 员工信息表 -->
         <div v-if="type === 'personal'">
           <h2 class="centInfo">员工信息表</h2>
           <table cellspacing="0" width="100%" class="tableList">
@@ -223,6 +225,7 @@
           </table>
           <div class="foot">签字：___________日期:___________</div>
         </div>
+        <!-- 岗位信息表 -->
         <div v-else>
           <h2 class="centInfo">岗位信息表</h2>
           <table cellspacing="0" width="100%" class="tableList">
@@ -341,8 +344,8 @@
 </template>
 
 <script>
-import { getPersonalDetail } from '@/api/employees'
-import { getUserDetail as getUserDetailById } from '@/api/user'
+import { getPersonalDetail } from '@/api/employess'
+import { getUserDetail } from '@/api/user'
 export default {
   data() {
     return {
@@ -361,7 +364,7 @@ export default {
       this.formData = await getPersonalDetail(this.userId) // 获取个人基本信息
     },
     async getJobDetail() {
-      const userInfo = await getUserDetailById(this.userId)
+      const userInfo = await getUserDetail(this.userId)
       const jobInfo = await getJobDetail(this.userId) // 获取个人基本信息
       this.formData = { ...userInfo, ...jobInfo }
     }

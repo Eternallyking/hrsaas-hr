@@ -32,11 +32,11 @@
 <script>
 import XLSX from 'xlsx'
 export default {
+  name: 'UploadExcel',
   props: {
     beforeUpload: Function, // eslint-disable-line
     onSuccess: Function // eslint-disable-line
   },
-  name: 'UploadExcel',
   data() {
     return {
       loading: false,

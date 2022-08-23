@@ -1,45 +1,50 @@
 <template>
-  <div>
-    <el-upload
-      v-loading="loading"
-      element-loading-text="上传中"
-      element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(0, 0, 0, 0.8)"
-      action="#"
-      :file-list="fileList"
-      :http-request="onrequest"
-      list-type="picture-card"
-      :on-change="onChange"
-      :on-remove="onRemove"
-      :on-preview="onPreview"
-      :limit="1"
-      :class="fileList.lenght ? 'hide' : ''"
-      class="overflow"
-      :before-upload="beforeUpload"
-    >
-      <i class="el-icon-plus"></i>
-    </el-upload>
-    <el-dialog :visible.sync="previewimgdialog">
-      <img :src="imgurl" style="width: 100%" alt="" />
-    </el-dialog>
+  <div class="dashboard-container">
+    <div class="app-container">
+      <el-upload
+        v-loading="loading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0.8)"
+        :file-list="fileList"
+        :on-change="onChange"
+        :on-remove="onRemove"
+        :on-preview="onPreview"
+        :before-upload="beforeUpload"
+        action="#"
+        :limit="1"
+        list-type="picture-card"
+        :http-request="onRequest"
+        class="UploadImg"
+        :class="fileList.length ? 'hide' : ''"
+      >
+        <i class="el-icon-plus"></i>
+      </el-upload>
+      <el-dialog :visible.sync="imageShow">
+        <img :src="imgUrl" alt="" />
+      </el-dialog>
+    </div>
   </div>
 </template>
 
 <script>
-//id:AKIDrgOtAOfnlU1LQGqAI3dHo9PXUEk281jG
-//key:ZxBCyVmodDZgXBZidIiusb5KK5btxnOp
+// id:  AKIDa0A4i5B0Yx6yZtwiEUUCdngIcfRv84i6
+// key: A4h38vRgfNoyrTord8cplQovkJbbKma6
+
 import COS from 'cos-js-sdk-v5'
+// SECRETID 和 SECRETKEY请登录 https://console.cloud.tencent.com/cam/capi 进行查看和管理
 var cos = new COS({
-  SecretId: 'AKIDrgOtAOfnlU1LQGqAI3dHo9PXUEk281jG',
-  SecretKey: 'ZxBCyVmodDZgXBZidIiusb5KK5btxnOp'
+  SecretId: 'AKIDa0A4i5B0Yx6yZtwiEUUCdngIcfRv84i6',
+  SecretKey: 'A4h38vRgfNoyrTord8cplQovkJbbKma6'
 })
+console.log(cos)
 export default {
   name: 'UploadImg',
   data() {
     return {
       fileList: [],
-      previewimgdialog: false,
-      imgurl: '',
+      imageShow: false,
+      imgUrl: '',
       loading: false
     }
   },
@@ -47,12 +52,12 @@ export default {
   created() {},
 
   methods: {
-    onrequest({ file }) {
+    onRequest({ file }) {
       this.loading = true
-
+      console.log('自行上传')
       cos.putObject(
         {
-          Bucket: 'hmhr-31-king-1313341657' /* 必须 */,
+          Bucket: 'hmhr-lxh-1313341734' /* 必须 */,
           Region: 'ap-shanghai' /* 存储桶所在地域，必须字段 */,
           Key: file.name /* 必须 */,
           StorageClass: 'STANDARD',
@@ -62,34 +67,43 @@ export default {
           }
         },
         (err, data) => {
+          this.loading = false
           //   console.log(err || data)
           if (err || data.statusCode !== 200) {
-            return this.$message.error('亲，上传失败，请重试')
+            return this.$message.error('上传失败，请重试')
           }
-          this.$emit('onSuccess', { url: 'https://' + data.Location })
-          this.loading = false
+          this.$emit('onSuccess', {
+            url: 'https://' + data.Location
+          })
         }
       )
     },
-    onChange(file, filelist) {
-      this.fileList = filelist
+    // 文件状态改变时的
+    onChange(file, fileList) {
+      console.log('上传了图片')
+      this.fileList = fileList
     },
-    onRemove(file, filelist) {
-      this.fileList = filelist
+    onRemove(file, fileList) {
+      this.fileList = fileList
     },
+    // 点击文件列表中已上传的文件时
     onPreview(file) {
-      this.imgurl = file.url
-      this.previewimgdialog = true
+      this.imageShow = true
+      this.imgUrl = file.url
     },
     beforeUpload(file) {
-      const types = ['image/jpeg', 'image/png', 'image/gif', 'image/mp4']
+      //   限制上传图片格式
+      console.log(file)
+
+      const types = ['image/jpeg', 'image/png', 'image/gif']
       if (!types.includes(file.type)) {
-        this.$message.error('请选择' + types.join('、') + '图片')
+        this.$message.error('请选择' + types.join('、') + '格式的图片')
         return false
       }
-      const maxsize = 2 * 1024 * 1024
-      if (file.size > maxsize) {
-        this.$message.error('选择的图片不能超出2mb')
+      //   限制上传图片大小
+      const maxSize = 2 * 1024 * 1024
+      if (file.size > maxSize) {
+        this.$message.error('上传的图片不能大于2MB')
         return false
       }
     }
@@ -97,13 +111,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .hide .el-upload--picture-card {
   display: none;
 }
-.overflow {
-  width: 148px;
-  height: 148px;
+.UploadImg {
+  width: 150px;
+  height: 150px;
   overflow: hidden;
 }
 </style>

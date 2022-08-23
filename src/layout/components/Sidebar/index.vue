@@ -34,8 +34,7 @@ export default {
   computed: {
     ...mapGetters(['sidebar']),
     routes() {
-      // return this.$router.options.routes
-      return this.$store.state.premission.routes
+      return this.$store.state.permission.routes
     },
     activeMenu() {
       const route = this.$route

@@ -1,11 +1,22 @@
-import PageTooles from '@/components/PageTooles'
-import UploadExcel from '@/components/UploadExcel'
-import UploadImg from '@/components/UploadImg'
-const components = [PageTooles, UploadExcel, UploadImg]
+import PageTools from './PageTools'
+import UploadExcel from './UploadExcel'
+import UPloadImg from './UploadImg'
+import Calendar from './Calendar'
+import FullScreen from './FullScreen'
+import SvgIcon from './SvgIcon'
+import ToggleLang from './ToggleLang'
+const components = [
+  PageTools,
+  UploadExcel,
+  UPloadImg,
+  Calendar,
+  FullScreen,
+  SvgIcon,
+  ToggleLang
+]
 export default {
   install(Vue) {
-    components.forEach((component) => {
-      Vue.component(component.name, component)
-    })
+    //  注册全局的通用栏组件对象
+    components.forEach((component) => Vue.component(component.name, component))
   }
 }

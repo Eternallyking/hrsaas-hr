@@ -416,6 +416,7 @@ export default {
       value: '离职'
     }
   ],
+  // 导入员工路径映射表
   importMapKeyPath: {
     入职日期: 'timeOfEntry',
     姓名: 'username',
@@ -423,7 +424,7 @@ export default {
     手机号: 'mobile',
     转正日期: 'correctionTime'
   },
-  exportMapKeyPath: {
+  exportExcelMapPath: {
     手机号: 'mobile',
     姓名: 'username',
     入职日期: 'timeOfEntry',

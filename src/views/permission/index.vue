@@ -1,57 +1,48 @@
 <template>
   <div class="dashboard-container">
     <div class="app-container">
-      <PageTooles :isshowleft="false">
-        <template slot="right">
-          <el-button type="primary" size="small" @click="showadddialog('0', 1)"
-            >添加权限</el-button
-          >
+      <PageTools :isShowLeft="false">
+        <template #right>
+          <el-button size="mini" type="primary">添加权限</el-button>
         </template>
-      </PageTooles>
+      </PageTools>
       <el-table
-        ref="table"
+        border
         row-key="id"
         :data="permissions"
         slot="right"
-        border
+        ref="table"
+        style="width: 100%"
       >
-        <el-table-column align="center" label="名称">
+        <el-table-column align="center" label="名称" width="180">
           <template v-slot="{ row }">
             <i
-              @click="expend(row)"
-              v-if="row.children"
               style="margin-right: 5px"
+              v-if="row.children"
               class="el-icon-folder-opened"
+              @click="expend(row)"
             ></i>
             <span>{{ row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="code" align="center" label="标识" />
-        <el-table-column prop="description" align="center" label="描述" />
+        <el-table-column align="center" prop="code" label="标识" width="180">
+        </el-table-column>
+        <el-table-column align="center" prop="description" label="描述">
+        </el-table-column>
         <el-table-column align="center" label="操作">
-          <template slot-scope="{ row }">
-            <el-button type="text" @click="showadddialog(row.id,2)"
-              >添加</el-button
-            >
-            <el-button type="text">编辑</el-button>
-            <el-button type="text">删除</el-button>
+          <template v-slot="{ row }">
+            <el-button type="text">添加</el-button>
+            <el-button type="text" @click="showAddDialog(row.id, 1)"
+              >编辑</el-button
+            ><el-button type="text">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!-- 放置一个弹层 用来编辑新增节点 -->
-    <el-dialog
-      :title="`${showText}权限点`"
-      :visible.sync="showDialog"
-      @close="btnCancel"
-    >
+    <el-dialog :title="`${showText}权限点`" :visible.sync="showDialog">
       <!-- 表单 -->
-      <el-form
-        ref="perForm"
-        :model="formData"
-        :rules="rules"
-        label-width="120px"
-      >
+      <el-form ref="form" :model="formData" :rules="rules" label-width="120px">
         <el-form-item label="权限名称" prop="name">
           <el-input v-model="formData.name" style="width: 90%" />
         </el-form-item>
@@ -71,8 +62,10 @@
       </el-form>
       <el-row slot="footer" type="flex" justify="center">
         <el-col :span="6">
-          <el-button size="small" type="primary" @click="btnOK">确定</el-button>
-          <el-button size="small" @click="btnCancel">取消</el-button>
+          <el-button size="small" type="primary" @click="onSave"
+            >确定</el-button
+          >
+          <el-button size="small" @click="onSave">取消</el-button>
         </el-col>
       </el-row>
     </el-dialog>
@@ -80,13 +73,12 @@
 </template>
 
 <script>
-import { getPermissionList, addPermission } from '@/api/permission'
+import { getPermissionList, addPermission } from '@/api/permisson'
 import { transListToTree } from '@/utils'
 export default {
   data() {
     return {
       permissions: [],
-      showDialog: false,
       formData: {
         name: '', // 名称
         code: '', // 标识
@@ -101,7 +93,8 @@ export default {
         ],
         code: [{ required: true, message: '权限标识不能为空', trigger: 'blur' }]
       },
-      showText: '新增'
+      showDialog: false,
+      showText: ''
     }
   },
 
@@ -110,28 +103,29 @@ export default {
   },
 
   methods: {
+    // 获取列表
     async getPermissions() {
       const res = await getPermissionList()
       this.permissions = transListToTree(res, '0')
+      console.log(this.permissions)
     },
+
+    // 点击展开
     expend(row) {
       row.isExpand = !row.isExpand
       this.$refs.table.toggleRowExpansion(row, row.isExpand)
     },
-    showadddialog(id, type) {
+    showAddDialog(id, type) {
       this.showDialog = true
       this.formData.pid = id
       this.formData.type = type
     },
-    btnCancel() {
-      this.showDialog = false
-    },
-    btnOK() {
-      this.$refs.perForm.validate(async (valid) => {
+    onSave() {
+      this.$refs.form.validate(async (valid) => {
         if (!valid) return
         await addPermission(this.formData)
         this.$message.success('添加成功')
-        this.btnCancel()
+        this.showDialog = false
         this.getPermissions()
       })
     }
@@ -140,10 +134,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.el-card {
-  margin-bottom: 10px;
+.box-card {
+  margin-bottom: 20px;
 }
-::v-deep .el-table [class*='el-table__row--level'] .el-table__expand-icon {
+::v-deep.el-table [class*='el-table__row--level'] .el-table__expand-icon {
   display: none;
 }
 </style>
