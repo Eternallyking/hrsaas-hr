@@ -79,6 +79,9 @@ export default {
       isLogin: false,
     }
   },
+  created(){
+    console.log(123);
+  },
   methods: {
     async login() {
       // console.log('点击登录')
